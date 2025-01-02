@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Snake } from './games/Snake';
+import { Tetris } from './games/Tetris';
 
 type Command = {
   command: string;
@@ -97,6 +98,13 @@ help - Show this help message`;
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
           />
+        );
+      case 'tetris':
+        return (
+            <Tetris
+            onGameOver={handleGameOver}
+            onScoreUpdate={handleScoreUpdate}
+            />
         );
       default:
         return null;
