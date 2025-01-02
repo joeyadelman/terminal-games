@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Terminal Games Hub
 
-## Getting Started
+A retro-style terminal-based gaming platform built with Next.js and TypeScript. Experience classic games through a nostalgic command-line interface.
 
-First, run the development server:
+## 🎮 Features
 
+- Terminal-style interface with classic green-on-black theme
+- Command-line game navigation
+- Multiple classic games:
+  - 🐍 Snake: Classic snake game with progressive difficulty
+  - 🧱 Tetris (Coming Soon)
+  - 🏓 Pong (Coming Soon)
+- High score tracking with local storage
+- Responsive design
+- Keyboard controls
+
+## 🎯 Available Commands
+
+- `help` - Show available commands
+- `list` - Show available games
+- `play [game]` - Start a game (e.g., `play snake`)
+- `exit` - Exit current game
+- `clear` - Clear terminal
+
+## 🚀 Getting Started
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/terminal-games-hub.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+## 🎮 How to Play Snake
 
-To learn more about Next.js, take a look at the following resources:
+1. Type `play snake` to start the game
+2. Use arrow keys to control the snake
+3. Eat the red food to grow and increase your score
+4. Avoid hitting walls and yourself
+5. The snake speeds up as your score increases
+6. Type `exit` to quit the game
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Built With
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- React 19
+- Local Storage for score persistence
 
-## Deploy on Vercel
+## 🎨 Design Choices
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Retro terminal aesthetic with phosphor green text
+- Monospace font for authentic terminal feel
+- Minimalist UI focusing on gameplay
+- Progressive difficulty in games
+- Command-line interface for nostalgia
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔜 Upcoming Features
+
+- Additional classic games (Tetris, Pong)
+- Global leaderboard
+- More terminal commands
+- Game settings customization
+- Mobile touch controls
+- Sound effects
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 🙏 Acknowledgments
+
+- Inspired by classic terminal games
+- Built for retro gaming enthusiasts
