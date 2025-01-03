@@ -12,9 +12,11 @@ const ALIEN_SIZE = 30;
 const BULLET_SIZE = 5;
 const PLAYER_SPEED = 5;
 const BULLET_SPEED = 7;
-const ALIEN_SPEED = 1;
+const ALIEN_STEP = 20; // Horizontal step size for aliens
+const ALIEN_DROP = ALIEN_SIZE; // Distance to drop when hitting wall
 const ALIENS_PER_ROW = 8;
 const ALIEN_ROWS = 4;
+const MOVE_INTERVAL = 30; // Frames between alien movements
 
 export function SpaceInvaders({ 
   onGameOver,
@@ -37,6 +39,7 @@ export function SpaceInvaders({
   const [moveLeft, setMoveLeft] = useState(false);
   const [moveRight, setMoveRight] = useState(false);
   const [canShoot, setCanShoot] = useState(true);
+  const [moveFrame, setMoveFrame] = useState(0);
 
   // Initialize aliens
   const initializeAliens = useCallback(() => {
@@ -106,16 +109,79 @@ export function SpaceInvaders({
       return { ...prev, x: newX };
     });
 
-    // Update bullets
-    setBullets(prev => prev
-      .map(bullet => ({
-        ...bullet,
-        y: bullet.y - BULLET_SPEED,
-        active: bullet.y > 0
-      }))
-      .filter(bullet => bullet.active)
-    );
+    // Update aliens with frame-based movement
+    setMoveFrame(prev => (prev + 1) % MOVE_INTERVAL);
+    
+    if (moveFrame === 0) {
+      setAliens(prev => {
+        let shouldChangeDirection = false;
+        
+        // First check if any alien would hit a wall
+        prev.forEach(alien => {
+          if (!alien.alive) return;
+          const nextX = alien.x + ALIEN_STEP * alienDirection;
+          if (nextX <= 0 || nextX >= CANVAS_WIDTH - ALIEN_SIZE) {
+            shouldChangeDirection = true;
+          }
+        });
 
+        if (shouldChangeDirection) {
+          // Change direction and move down
+          setAlienDirection(d => -d);
+          return prev.map(alien => ({
+            ...alien,
+            y: alien.y + ALIEN_DROP
+          }));
+        } else {
+          // Just move horizontally
+          return prev.map(alien => ({
+            ...alien,
+            x: alien.x + ALIEN_STEP * alienDirection
+          }));
+        }
+      });
+    }
+
+    // Update bullets with single-hit detection
+    setBullets(prev => {
+      const activeBullets = [...prev];
+      const updatedBullets = activeBullets
+        .map(bullet => ({
+          ...bullet,
+          y: bullet.y - BULLET_SPEED,
+          active: bullet.y > 0
+        }))
+        .filter(bullet => bullet.active);
+      
+      // Check collisions for each bullet
+      updatedBullets.forEach(bullet => {
+        if (!bullet.active) return; // Skip already used bullets
+        
+        // Find first collision with an alien
+        const hitAlienIndex = aliens.findIndex(alien => 
+          alien.alive && checkCollision(bullet, alien, ALIEN_SIZE, ALIEN_SIZE)
+        );
+
+        if (hitAlienIndex !== -1) {
+          // Deactivate the bullet
+          bullet.active = false;
+          // Update alien state
+          setAliens(prev => prev.map((a, i) => 
+            i === hitAlienIndex ? { ...a, alive: false } : a
+          ));
+          // Update score
+          setScore(prev => {
+            const newScore = prev + 10;
+            onScoreUpdate(newScore);
+            return newScore;
+          });
+        }
+      });
+
+      return updatedBullets.filter(bullet => bullet.active);
+    });
+
+    // Update alien bullets
     setAlienBullets(prev => prev
       .map(bullet => ({
         ...bullet,
@@ -125,48 +191,11 @@ export function SpaceInvaders({
       .filter(bullet => bullet.active)
     );
 
-    // Update aliens
-    setAliens(prev => {
-      let shouldChangeDirection = false;
-      const newAliens = prev.map(alien => {
-        if (!alien.alive) return alien;
-        const newX = alien.x + ALIEN_SPEED * alienDirection;
-        if (newX <= 0 || newX >= CANVAS_WIDTH - ALIEN_SIZE) {
-          shouldChangeDirection = true;
-        }
-        return { ...alien, x: newX };
-      });
-
-      if (shouldChangeDirection) {
-        setAlienDirection(d => -d);
-        return newAliens.map(alien => ({
-          ...alien,
-          y: alien.y + ALIEN_SIZE
-        }));
-      }
-      return newAliens;
-    });
-
-    // Check collisions
+    // Check collisions with player
     alienBullets.forEach(bullet => {
       if (checkCollision(bullet, player, PLAYER_WIDTH, PLAYER_HEIGHT)) {
         handleGameOver();
       }
-    });
-
-    bullets.forEach(bullet => {
-      aliens.forEach((alien, index) => {
-        if (alien.alive && checkCollision(bullet, alien, ALIEN_SIZE, ALIEN_SIZE)) {
-          setAliens(prev => prev.map((a, i) => 
-            i === index ? { ...a, alive: false } : a
-          ));
-          setScore(prev => {
-            const newScore = prev + 10;
-            onScoreUpdate(newScore);
-            return newScore;
-          });
-        }
-      });
     });
 
     // Check if aliens reached player
@@ -180,7 +209,7 @@ export function SpaceInvaders({
     }
   }, [
     isPlaying, moveLeft, moveRight, alienDirection,
-    aliens, bullets, alienBullets, player,
+    aliens, moveFrame,
     checkCollision, handleGameOver, handleWin, onScoreUpdate
   ]);
 
