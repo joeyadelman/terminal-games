@@ -15,6 +15,8 @@ export function Terminal() {
   const [currentInput, setCurrentInput] = useState('');
   const [currentGame, setCurrentGame] = useState<string | null>(null);
   const [currentScore, setCurrentScore] = useState(0);
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
   const games = {
     snake: 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
@@ -73,7 +75,28 @@ help - Show this help message`;
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleCommand(currentInput);
+      setCommandHistory(prev => [...prev, currentInput]);
+      setHistoryIndex(-1);
       setCurrentInput('');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length > 0) {
+        const newIndex = historyIndex + 1;
+        if (newIndex < commandHistory.length) {
+          setHistoryIndex(newIndex);
+          setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
+        }
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setCurrentInput('');
+      }
     }
   };
 
