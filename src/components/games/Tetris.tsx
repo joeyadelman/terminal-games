@@ -381,12 +381,13 @@ export function Tetris({
   };
 
   return (
-    <div className="flex gap-4">
-      <div className="flex flex-col items-center">
-        <div className="mb-4 flex gap-4 text-green-500">
-          <div>Score: {score}</div>
-          <div>High Score: {highScore}</div>
-        </div>
+    <div className="flex flex-col items-center">
+      <div className="mb-4 flex gap-4 text-green-500">
+        <div>Score: {score}</div>
+        <div>High Score: {highScore}</div>
+      </div>
+      <div className="flex items-start gap-4">
+        <StatisticsDisplay />
         <div 
           className="border border-green-500"
           style={{
@@ -414,12 +415,6 @@ export function Tetris({
             ))
           )}
         </div>
-        {gameOver && (
-          <div className="mt-4 text-red-500">Game Over!</div>
-        )}
-      </div>
-      <div className="flex flex-col gap-4">
-        <StatisticsDisplay />
         <NextPieceDisplay />
       </div>
     </div>

@@ -123,17 +123,31 @@ help - Show this help message`;
   }, [currentGame]);
 
   return (
-    <div className="font-mono text-green-500 p-4">
+    <div className="font-mono text-green-500 p-4 pl-8">
       <h1 className="mb-2">Welcome to Terminal Games Hub</h1>
       <p className="mb-4">Type "help" for commands</p>
       
       {currentGame ? (
         <div className="mb-4">
-        <p className="mt-2">Press 'q' or type "exit" to quit the game</p>
-          {renderGame()}
+          <p className="mt-2 mb-4">Press 'q' or type "exit" to quit the game</p>
+          {currentGame === 'tetris' && (
+            <div className="relative">
+              <div className="absolute left-0 text-green-500 mt-8">
+                <p>Controls:</p>
+                <p>← → : Move left/right</p>
+                <p>↓ : Move down</p>
+                <p>↑ or Z : Rotate clockwise</p>
+                <p>X : Rotate counter-clockwise</p>
+                <p>Clear lines to score points!</p>
+              </div>
+              <div className="flex justify-center">
+                {renderGame()}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
-        <>
+        <div>
           {commands.map((cmd, i) => (
             <div key={i} className="mb-2">
               <div>
@@ -155,7 +169,7 @@ help - Show this help message`;
               autoFocus
             />
           </div>
-        </>
+        </div>
       )}
     </div>
   );
