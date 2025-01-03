@@ -117,16 +117,28 @@ export function Tetris({
     return 0;
   });
   const [gameOver, setGameOver] = useState(false);
+  const [pieceStats, setPieceStats] = useState<Record<TetrominoType, number>>({
+    I: 0, O: 0, T: 0, S: 0, Z: 0, J: 0, L: 0
+  });
+  const [nextPiece, setNextPiece] = useState<TetrominoType | null>(null);
 
   const createNewPiece = useCallback(() => {
     const types = Object.keys(TETROMINOES) as TetrominoType[];
-    const type = types[Math.floor(Math.random() * types.length)];
+    const type = nextPiece || types[Math.floor(Math.random() * types.length)];
+    const newNextPiece = types[Math.floor(Math.random() * types.length)];
+    
+    setPieceStats(prev => ({
+      ...prev,
+      [type]: prev[type] + 1
+    }));
+    
+    setNextPiece(newNextPiece);
     return {
       type,
       position: { x: Math.floor(GRID_WIDTH / 2) - 1, y: 0 },
       rotation: 0
     };
-  }, []);
+  }, [nextPiece]);
 
   const checkCollision = useCallback((piece: typeof currentPiece, grid: Grid) => {
     if (!piece) return false;
@@ -309,42 +321,107 @@ export function Tetris({
     ? mergePieceToGrid(currentPiece, grid) 
     : grid;
 
-  return (
-    <div className="flex flex-col items-center">
-      <div className="mb-4 flex gap-4 text-green-500">
-        <div>Score: {score}</div>
-        <div>High Score: {highScore}</div>
+  const StatisticsDisplay = () => (
+    <div className="border border-green-500 p-2">
+      <div className="text-green-500 mb-2">Statistics:</div>
+      {Object.entries(pieceStats).map(([piece, count]) => (
+        <div key={piece} className="flex items-center gap-2 text-green-500 mb-2">
+          <div className="w-24 h-6 relative">
+            {TETROMINOES[piece as TetrominoType].shape.map((row, y) => 
+              row.map((cell, x) => (
+                cell ? (
+                  <div
+                    key={`${x}-${y}`}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      backgroundColor: TETROMINOES[piece as TetrominoType].color,
+                      position: 'absolute',
+                      left: x * 12,
+                      top: y * 12
+                    }}
+                  />
+                ) : null
+              ))
+            )}
+          </div>
+          <div>{String(count).padStart(3, '0')}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const NextPieceDisplay = () => {
+    if (!nextPiece) return null;
+    const shape = TETROMINOES[nextPiece].shape;
+    return (
+      <div className="border border-green-500 p-2">
+        <div className="text-green-500 mb-2">Next:</div>
+        <div className="w-24 h-12 relative">
+          {shape.map((row, y) => 
+            row.map((cell, x) => (
+              cell ? (
+                <div
+                  key={`${x}-${y}`}
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    backgroundColor: TETROMINOES[nextPiece].color,
+                    position: 'absolute',
+                    left: x * 12,
+                    top: y * 12
+                  }}
+                />
+              ) : null
+            ))
+          )}
+        </div>
       </div>
-      <div 
-        className="border border-green-500"
-        style={{
-          width: GRID_WIDTH * CELL_SIZE,
-          height: GRID_HEIGHT * CELL_SIZE,
-          position: 'relative',
-          backgroundColor: 'black',
-          display: 'grid',
-          gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)`,
-          gap: '1px',
-          padding: '1px'
-        }}
-      >
-        {displayGrid.map((row, y) => 
-          row.map((cell, x) => (
-            <div
-              key={`${x}-${y}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: cell || 'black',
-                border: '1px solid rgb(34, 197, 94)'
-              }}
-            />
-          ))
+    );
+  };
+
+  return (
+    <div className="flex gap-4">
+      <div className="flex flex-col items-center">
+        <div className="mb-4 flex gap-4 text-green-500">
+          <div>Score: {score}</div>
+          <div>High Score: {highScore}</div>
+        </div>
+        <div 
+          className="border border-green-500"
+          style={{
+            width: GRID_WIDTH * CELL_SIZE,
+            height: GRID_HEIGHT * CELL_SIZE,
+            position: 'relative',
+            backgroundColor: 'black',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)`,
+            gap: '1px',
+            padding: '1px'
+          }}
+        >
+          {displayGrid.map((row, y) => 
+            row.map((cell, x) => (
+              <div
+                key={`${x}-${y}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: cell || 'black',
+                  border: '1px solid rgb(34, 197, 94)'
+                }}
+              />
+            ))
+          )}
+        </div>
+        {gameOver && (
+          <div className="mt-4 text-red-500">Game Over!</div>
         )}
       </div>
-      {gameOver && (
-        <div className="mt-4 text-red-500">Game Over!</div>
-      )}
+      <div className="flex flex-col gap-4">
+        <StatisticsDisplay />
+        <NextPieceDisplay />
+      </div>
     </div>
   );
 } 
