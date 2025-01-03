@@ -15,9 +15,10 @@ const CANVAS_HEIGHT = 400;
 const PADDLE_HEIGHT = 60;
 const PADDLE_WIDTH = 10;
 const BALL_SIZE = 8;
-const PADDLE_SPEED = 8;
+const PADDLE_SPEED = 20;
 const INITIAL_BALL_SPEED = 5;
-const SPEED_INCREASE = 0.2;
+const SPEED_INCREASE = 0.02;
+const WINNING_SCORE = 5;
 
 export function Pong({ 
   onGameOver,
@@ -42,9 +43,15 @@ export function Pong({
   const resetBall = useCallback((direction?: 'left' | 'right') => {
     setBall({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 });
     const xDir = direction ? (direction === 'left' ? -1 : 1) : (Math.random() > 0.5 ? 1 : -1);
+    
+    // Reset paddles to center
+    setLeftPaddle(prev => ({ ...prev, y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 }));
+    setRightPaddle(prev => ({ ...prev, y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 }));
+    
+    // Shoot directly horizontal with slight vertical variation
     setBallVelocity({ 
       x: INITIAL_BALL_SPEED * xDir,
-      y: INITIAL_BALL_SPEED * (Math.random() * 1.5 - 0.75) // More controlled vertical angle
+      y: 0 // Much smaller vertical angle
     });
   }, []);
 
@@ -106,11 +113,21 @@ export function Pong({
 
       // Scoring
       if (newBall.x <= 0) {
-        setRightPaddle(prev => ({ ...prev, score: prev.score + 1 }));
+        const newScore = rightPaddle.score + 1;
+        if (newScore >= WINNING_SCORE) {
+          onGameOver({ score: leftPaddle.score, highScore });
+          return { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
+        }
+        setRightPaddle(prev => ({ ...prev, score: newScore }));
         resetBall('left');
         return { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
       } else if (newBall.x >= CANVAS_WIDTH) {
-        setLeftPaddle(prev => ({ ...prev, score: prev.score + 1 }));
+        const newScore = leftPaddle.score + 1;
+        if (newScore >= WINNING_SCORE) {
+          onGameOver({ score: leftPaddle.score, highScore });
+          return { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
+        }
+        setLeftPaddle(prev => ({ ...prev, score: newScore }));
         resetBall('right');
         return { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
       }
@@ -121,7 +138,7 @@ export function Pong({
     // AI paddle movement
     setRightPaddle(prev => {
       const targetY = ball.y - PADDLE_HEIGHT / 2;
-      const moveAmount = (targetY - prev.y) * 0.1; // Smooth following
+      const moveAmount = (targetY - prev.y) * 0.07; // Reduced from 0.1 for smoother AI movement
       return {
         ...prev,
         y: Math.min(Math.max(prev.y + moveAmount, 0), CANVAS_HEIGHT - PADDLE_HEIGHT)
@@ -179,10 +196,10 @@ export function Pong({
         className="border border-green-500 bg-black relative"
         style={{ width: CANVAS_WIDTH, height: CANVAS_HEIGHT }}
       >
-        {!isPlaying ? (
+        {countdown > 0 ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-4xl text-green-500">
-              {countdown > 0 ? countdown : 'GO!'}
+              {countdown}
             </span>
           </div>
         ) : (

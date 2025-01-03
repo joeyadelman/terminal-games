@@ -139,7 +139,7 @@ help - Show this help message`;
       
       {currentGame ? (
         <div className="mb-4">
-          <p className="mt-2 mb-4">Press 'q' or type "exit" to quit the game</p>
+          <p className="mt-2 mb-4">Press 'q' to quit the game</p>
           {currentGame === 'tetris' && (
             <div className="relative">
               <div className="absolute left-0 text-green-500 mt-8">
