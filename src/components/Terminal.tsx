@@ -89,10 +89,12 @@ help - Show this help message`;
   };
 
   const renderGame = () => {
+    console.log('Current game:', currentGame);
     if (!currentGame) return null;
 
     switch (currentGame) {
       case 'snake':
+        console.log('Rendering Snake component');
         return (
           <Snake 
             onGameOver={handleGameOver}
@@ -141,6 +143,19 @@ help - Show this help message`;
                 <p>Clear lines to score points!</p>
               </div>
               <div className="flex justify-center">
+                {renderGame()}
+              </div>
+            </div>
+          )}
+          {currentGame === 'snake' && (
+            <div className="relative">
+              <div className="absolute left-0 text-green-500 mt-8">
+                <p>Controls:</p>
+                <p>← → ↑ ↓ : Move snake</p>
+                <p>Collect food to grow and score points!</p>
+                <p>Don't hit the walls or yourself!</p>
+              </div>
+              <div className="flex justify-center min-h-[500px] min-w-[500px]">
                 {renderGame()}
               </div>
             </div>

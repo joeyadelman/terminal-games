@@ -8,7 +8,7 @@ const GRID_WIDTH = 10;
 const GRID_HEIGHT = 20;
 const CELL_SIZE = 25;
 const INITIAL_SPEED = 800;
-const SPEED_INCREASE = 50;
+const SPEED_INCREASE = 10;
 const POINTS_PER_LINE = 100;
 
 const TETROMINOES = {
@@ -217,7 +217,7 @@ export function Tetris({
       const newGrid = mergePieceToGrid(currentPiece, grid);
       const { newGrid: clearedGrid, linesCleared } = clearLines(newGrid);
       
-      const newScore = score + (linesCleared * POINTS_PER_LINE);
+      const newScore = score + (linesCleared * POINTS_PER_LINE * 2);
       setScore(newScore);
       onScoreUpdate(newScore);
       setGrid(clearedGrid);
@@ -312,7 +312,7 @@ export function Tetris({
   useEffect(() => {
     const gameLoop = setInterval(
       moveDown, 
-      Math.max(100, INITIAL_SPEED - (score * SPEED_INCREASE))
+      Math.max(100, INITIAL_SPEED - (score * SPEED_INCREASE * 0.5))
     );
     return () => clearInterval(gameLoop);
   }, [moveDown, score]);

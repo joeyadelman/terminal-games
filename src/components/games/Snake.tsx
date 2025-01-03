@@ -35,6 +35,8 @@ export function Snake({
     }
     return 0;
   });
+  const [countdown, setCountdown] = useState<number>(2);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const generateFood = useCallback(() => {
     const availableSpaces: Position[] = [];
@@ -145,9 +147,22 @@ export function Snake({
   }, [direction]);
 
   useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setIsPlaying(true);
+    }
+  }, [countdown]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    
     const gameLoop = setInterval(moveSnake, getCurrentSpeed());
     return () => clearInterval(gameLoop);
-  }, [moveSnake, getCurrentSpeed]);
+  }, [moveSnake, getCurrentSpeed, isPlaying]);
 
   return (
     <div className="flex flex-col items-center">
@@ -163,27 +178,37 @@ export function Snake({
           position: 'relative'
         }}
       >
-        {snake.map((segment, i) => (
-          <div
-            key={i}
-            className="bg-green-500 absolute"
-            style={{
-              width: CELL_SIZE - 1,
-              height: CELL_SIZE - 1,
-              left: segment.x * CELL_SIZE,
-              top: segment.y * CELL_SIZE,
-            }}
-          />
-        ))}
-        <div
-          className="bg-red-500 absolute"
-          style={{
-            width: CELL_SIZE - 1,
-            height: CELL_SIZE - 1,
-            left: food.x * CELL_SIZE,
-            top: food.y * CELL_SIZE,
-          }}
-        />
+        {!isPlaying ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-4xl text-green-500">
+              {countdown > 0 ? countdown : 'GO!'}
+            </span>
+          </div>
+        ) : (
+          <>
+            {snake.map((segment, i) => (
+              <div
+                key={i}
+                className="bg-green-500 absolute"
+                style={{
+                  width: CELL_SIZE - 1,
+                  height: CELL_SIZE - 1,
+                  left: segment.x * CELL_SIZE,
+                  top: segment.y * CELL_SIZE,
+                }}
+              />
+            ))}
+            <div
+              className="bg-red-500 absolute"
+              style={{
+                width: CELL_SIZE - 1,
+                height: CELL_SIZE - 1,
+                left: food.x * CELL_SIZE,
+                top: food.y * CELL_SIZE,
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );
