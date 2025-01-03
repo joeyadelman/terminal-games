@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Snake } from './games/Snake';
 import { Tetris } from './games/Tetris';
 import { Pong } from './games/Pong';
+import { SpaceInvaders } from './games/SpaceInvaders';
 
 type Command = {
   command: string;
@@ -21,7 +22,8 @@ export function Terminal() {
   const games = {
     snake: 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
     tetris: 'The original block stacking game',
-    pong: 'Classic paddle game against CPU'
+    pong: 'Classic paddle game against CPU',
+    invaders: 'Classic space shooter. Defend Earth from alien invasion!'
   };
 
   const handleCommand = (input: string) => {
@@ -139,6 +141,13 @@ help - Show this help message`;
             onScoreUpdate={handleScoreUpdate}
           />
         );
+      case 'invaders':
+        return (
+          <SpaceInvaders
+            onGameOver={handleGameOver}
+            onScoreUpdate={handleScoreUpdate}
+          />
+        );
       default:
         return null;
     }
@@ -217,6 +226,20 @@ help - Show this help message`;
                 <p>↑ ↓ : Move paddle up/down</p>
                 <p>Score points against the CPU!</p>
                 <p>Ball speeds up with each hit</p>
+              </div>
+              <div className="flex justify-center min-h-[500px] min-w-[600px]">
+                {renderGame()}
+              </div>
+            </div>
+          )}
+          {currentGame === 'invaders' && (
+            <div className="relative">
+              <div className="absolute left-0 text-green-500 mt-8">
+                <p>Controls:</p>
+                <p>← → : Move left/right</p>
+                <p>SPACE : Shoot</p>
+                <p>Destroy all aliens to win!</p>
+                <p>Don't get hit by alien bullets!</p>
               </div>
               <div className="flex justify-center min-h-[500px] min-w-[600px]">
                 {renderGame()}
