@@ -22,6 +22,9 @@ A retro-style terminal-based gaming platform built with Next.js and TypeScript. 
 - `exit` - Exit current game
 - `clear` - Clear terminal
 
+In-game controls:
+- `q` - Quick exit from any game
+
 ## 🚀 Getting Started
 
 1. Clone the repository:

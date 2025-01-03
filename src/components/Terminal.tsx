@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Snake } from './games/Snake';
 import { Tetris } from './games/Tetris';
 
@@ -32,7 +32,10 @@ list - Show available games
 play [game] - Start a game
 exit - Exit current game
 clear - Clear terminal
-help - Show this help message`;
+help - Show this help message
+
+While in game:
+'q' - Quick exit from game`;
         break;
 
       case 'list':
@@ -111,6 +114,17 @@ help - Show this help message`;
     }
   };
 
+  useEffect(() => {
+    const handleQuitKey = (e: KeyboardEvent) => {
+      if (e.key === 'q' && currentGame) {
+        handleCommand('exit');
+      }
+    };
+
+    window.addEventListener('keydown', handleQuitKey);
+    return () => window.removeEventListener('keydown', handleQuitKey);
+  }, [currentGame]);
+
   return (
     <div className="font-mono text-green-500 p-4">
       <h1 className="mb-2">Welcome to Terminal Games Hub</h1>
@@ -119,7 +133,7 @@ help - Show this help message`;
       {currentGame ? (
         <div className="mb-4">
           {renderGame()}
-          <p className="mt-2">Type "exit" to quit the game</p>
+          <p className="mt-2">Press 'q' or type "exit" to quit the game</p>
         </div>
       ) : (
         <>
