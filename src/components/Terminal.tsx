@@ -157,8 +157,9 @@ help - Show this help message`;
 
   return (
     <div className="font-mono text-green-500 p-4 pl-8">
-      <div className="mb-6 text-center">
-        <pre className="text-xs sm:text-sm whitespace-pre">
+      {!currentGame && (
+        <div className="mb-6 text-center">
+          <pre className="text-xs sm:text-sm whitespace-pre">
 {`
 ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗      
 ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║      
@@ -173,13 +174,14 @@ help - Show this help message`;
                        ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗███████║ 
                         ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ 
 `}</pre>
-        <p className="text-sm mt-4">Type "help" for available commands</p>
-        <p className="text-xs opacity-75 mt-1">v1.0.0 | Created by Walt</p>
-      </div>
+          <p className="text-sm mt-4">Type "help" for available commands</p>
+          <p className="text-xs opacity-75 mt-1">v1.0.0 | Created by Walt</p>
+        </div>
+      )}
 
       {currentGame ? (
-        <div className="mb-4">
-          <p className="mt-2 mb-4">Press 'q' to quit the game</p>
+        <div>
+          <p className="mb-4">Press 'q' to quit the game</p>
           {currentGame === 'tetris' && (
             <div className="relative">
               <div className="absolute left-0 text-green-500 mt-8">
