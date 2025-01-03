@@ -30,12 +30,9 @@ export function Terminal() {
         output = `Available commands:
 list - Show available games
 play [game] - Start a game
-exit - Exit current game
+q - Exit current game
 clear - Clear terminal
-help - Show this help message
-
-While in game:
-'q' - Quick exit from game`;
+help - Show this help message`;
         break;
 
       case 'list':

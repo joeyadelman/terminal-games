@@ -19,11 +19,8 @@ A retro-style terminal-based gaming platform built with Next.js and TypeScript. 
 - `help` - Show available commands
 - `list` - Show available games
 - `play [game]` - Start a game (e.g., `play snake`)
-- `exit` - Exit current game
+- `q` - Exit current game
 - `clear` - Clear terminal
-
-In-game controls:
-- `q` - Quick exit from any game
 
 ## 🚀 Getting Started
 
