@@ -168,12 +168,10 @@ export function Tetris({
       shape = rotateMatrix(shape);
     }
     
-    const color = TETROMINOES[piece.type].color;
-
     for (let y = 0; y < shape.length; y++) {
       for (let x = 0; x < shape[y].length; x++) {
         if (shape[y][x] && piece.position.y + y >= 0) {
-          newGrid[piece.position.y + y][piece.position.x + x] = color;
+          newGrid[piece.position.y + y][piece.position.x + x] = TETROMINOES[piece.type].color;
         }
       }
     }
@@ -313,24 +311,33 @@ export function Tetris({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-4 flex gap-4">
+      <div className="mb-4 flex gap-4 text-green-500">
         <div>Score: {score}</div>
         <div>High Score: {highScore}</div>
       </div>
       <div 
-        className="border border-green-500 grid gap-px bg-green-500"
+        className="border border-green-500"
         style={{
-          gridTemplateColumns: `repeat(${GRID_WIDTH}, ${CELL_SIZE}px)`,
-          padding: '1px',
+          width: GRID_WIDTH * CELL_SIZE,
+          height: GRID_HEIGHT * CELL_SIZE,
+          position: 'relative',
+          backgroundColor: 'black',
+          display: 'grid',
+          gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)`,
+          gap: '1px',
+          padding: '1px'
         }}
       >
         {displayGrid.map((row, y) => 
           row.map((cell, x) => (
             <div
               key={`${x}-${y}`}
-              className={`w-6 h-6 ${
-                cell ? `bg-${cell}-500` : 'bg-black'
-              }`}
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: cell || 'black',
+                border: '1px solid rgb(34, 197, 94)'
+              }}
             />
           ))
         )}

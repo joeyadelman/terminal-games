@@ -129,8 +129,8 @@ help - Show this help message`;
       
       {currentGame ? (
         <div className="mb-4">
+        <p className="mt-2">Press 'q' or type "exit" to quit the game</p>
           {renderGame()}
-          <p className="mt-2">Press 'q' or type "exit" to quit the game</p>
         </div>
       ) : (
         <>
