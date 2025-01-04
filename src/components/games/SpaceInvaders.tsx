@@ -20,6 +20,9 @@ const ALIEN_ROWS = 4;
 const MOVE_INTERVAL = 30; // Frames between alien movements
 const ALIEN_SHOOTING_INTERVAL = 800; // Aliens shoot every 500ms
 const ALIEN_SHOOTING_CHANCE = 0.05;   // 5% chance for each alien to shoot
+const MIN_SHOOT_DELAY = 1000;  // Minimum 1 second between shots
+const MAX_SHOOT_DELAY = 3000;  // Maximum 3 seconds between shots
+const ALIEN_SHOOT_INTERVAL = 500; // Half second
 
 export function SpaceInvaders({ 
   onGameOver,
@@ -276,17 +279,18 @@ export function SpaceInvaders({
       // Get all living aliens
       const livingAliens = aliens.filter(alien => alien.alive);
       
-      // Each living alien has a chance to shoot
-      livingAliens.forEach(alien => {
-        if (Math.random() < ALIEN_SHOOTING_CHANCE) {
-          setAlienBullets(prev => [...prev, {
-            x: alien.x + ALIEN_SIZE / 2,
-            y: alien.y + ALIEN_SIZE,
-            active: true
-          }]);
-        }
-      });
-    }, ALIEN_SHOOTING_INTERVAL);
+      if (livingAliens.length > 0) {
+        // Pick a random alien
+        const randomAlien = livingAliens[Math.floor(Math.random() * livingAliens.length)];
+        
+        // Make it shoot
+        setAlienBullets(prev => [...prev, {
+          x: randomAlien.x + ALIEN_SIZE / 2,
+          y: randomAlien.y + ALIEN_SIZE,
+          active: true
+        }]);
+      }
+    }, ALIEN_SHOOT_INTERVAL);
 
     return () => clearInterval(shootInterval);
   }, [isPlaying, aliens]);
@@ -298,6 +302,11 @@ export function SpaceInvaders({
     const gameLoop = setInterval(updateGame, 1000 / 60);
     return () => clearInterval(gameLoop);
   }, [isPlaying, updateGame]);
+
+  // Add this function to get a random delay
+  const getRandomDelay = () => {
+    return Math.random() * (MAX_SHOOT_DELAY - MIN_SHOOT_DELAY) + MIN_SHOOT_DELAY;
+  };
 
   return (
     <div className="flex flex-col items-center">
