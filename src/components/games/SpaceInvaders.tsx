@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import spaceAlien from '@/assets/space-alien.png';
 
 type Position = { x: number; y: number };
 type Alien = Position & { alive: boolean };
@@ -352,12 +353,16 @@ export function SpaceInvaders({
               alien.alive && (
                 <div
                   key={index}
-                  className="absolute bg-green-500"
+                  className="absolute"
                   style={{
                     left: alien.x,
                     top: alien.y,
                     width: ALIEN_SIZE,
-                    height: ALIEN_SIZE
+                    height: ALIEN_SIZE,
+                    backgroundImage: `url(${spaceAlien.src})`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center'
                   }}
                 />
               )
