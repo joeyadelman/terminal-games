@@ -18,6 +18,8 @@ const ALIEN_DROP = ALIEN_SIZE; // Distance to drop when hitting wall
 const ALIENS_PER_ROW = 8;
 const ALIEN_ROWS = 4;
 const MOVE_INTERVAL = 30; // Frames between alien movements
+const ALIEN_SHOOTING_INTERVAL = 800; // Aliens shoot every 500ms
+const ALIEN_SHOOTING_CHANCE = 0.05;   // 5% chance for each alien to shoot
 
 export function SpaceInvaders({ 
   onGameOver,
@@ -271,16 +273,20 @@ export function SpaceInvaders({
     if (!isPlaying) return;
 
     const shootInterval = setInterval(() => {
+      // Get all living aliens
       const livingAliens = aliens.filter(alien => alien.alive);
-      if (livingAliens.length > 0) {
-        const randomAlien = livingAliens[Math.floor(Math.random() * livingAliens.length)];
-        setAlienBullets(prev => [...prev, {
-          x: randomAlien.x + ALIEN_SIZE / 2,
-          y: randomAlien.y + ALIEN_SIZE,
-          active: true
-        }]);
-      }
-    }, 1000);
+      
+      // Each living alien has a chance to shoot
+      livingAliens.forEach(alien => {
+        if (Math.random() < ALIEN_SHOOTING_CHANCE) {
+          setAlienBullets(prev => [...prev, {
+            x: alien.x + ALIEN_SIZE / 2,
+            y: alien.y + ALIEN_SIZE,
+            active: true
+          }]);
+        }
+      });
+    }, ALIEN_SHOOTING_INTERVAL);
 
     return () => clearInterval(shootInterval);
   }, [isPlaying, aliens]);
