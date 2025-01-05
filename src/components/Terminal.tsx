@@ -5,7 +5,6 @@ import { Snake } from './games/Snake';
 import { Tetris } from './games/Tetris';
 import { Pong } from './games/Pong';
 import { SpaceInvaders } from './games/SpaceInvaders';
-import { Cube } from './games/Cube';
 
 type Command = {
   command: string;
@@ -33,8 +32,7 @@ export function Terminal() {
     'snake.sh': 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
     'tetris.sh': 'The original block stacking game',
     'pong.sh': 'Classic paddle game against CPU',
-    'invaders.sh': 'Classic space shooter. Defend Earth from alien invasion!',
-    'cube.sh': 'Display an ASCII cube'
+    'invaders.sh': 'Classic space shooter. Defend Earth from alien invasion!'
   };
 
   const handleCommand = (input: string) => {
@@ -174,10 +172,6 @@ export function Terminal() {
             onScoreUpdate={handleScoreUpdate}
           />
         );
-      case 'cube':
-        return (
-          <Cube onExit={() => setCurrentGame(null)} />
-        );
       default:
         return null;
     }
@@ -274,11 +268,6 @@ export function Terminal() {
               <div className="flex justify-center min-h-[500px] min-w-[600px]">
                 {renderGame()}
               </div>
-            </div>
-          )}
-          {currentGame === 'cube' && (
-            <div className="flex justify-center min-h-[300px]">
-              {renderGame()}
             </div>
           )}
         </div>
