@@ -5,6 +5,7 @@ import { Snake } from './games/Snake';
 import { Tetris } from './games/Tetris';
 import { Pong } from './games/Pong';
 import { SpaceInvaders } from './games/SpaceInvaders';
+import { Cube } from './games/Cube';
 
 type Command = {
   command: string;
@@ -23,7 +24,8 @@ export function Terminal() {
     snake: 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
     tetris: 'The original block stacking game',
     pong: 'Classic paddle game against CPU',
-    invaders: 'Classic space shooter. Defend Earth from alien invasion!'
+    invaders: 'Classic space shooter. Defend Earth from alien invasion!',
+    cube: 'Display an ASCII cube'
   };
 
   const handleCommand = (input: string) => {
@@ -35,6 +37,7 @@ export function Terminal() {
         output = `Available commands:
 list - Show available games
 play [game] - Start a game
+cube - Display ASCII cube
 q - Exit current game
 clear - Clear terminal
 help - Show this help message`;
@@ -49,6 +52,11 @@ help - Show this help message`;
       case 'clear':
         setCommands([]);
         return;
+
+      case 'cube':
+        setCurrentGame('cube');
+        output = 'Displaying ASCII cube...';
+        break;
 
       default:
         if (cmd.startsWith('play ')) {
@@ -115,12 +123,10 @@ help - Show this help message`;
   };
 
   const renderGame = () => {
-    console.log('Current game:', currentGame);
     if (!currentGame) return null;
 
     switch (currentGame) {
       case 'snake':
-        console.log('Rendering Snake component');
         return (
           <Snake 
             onGameOver={handleGameOver}
@@ -129,10 +135,10 @@ help - Show this help message`;
         );
       case 'tetris':
         return (
-            <Tetris
+          <Tetris
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
-            />
+          />
         );
       case 'pong':
         return (
@@ -147,6 +153,10 @@ help - Show this help message`;
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
           />
+        );
+      case 'cube':
+        return (
+          <Cube onExit={() => setCurrentGame(null)} />
         );
       default:
         return null;
@@ -244,6 +254,11 @@ help - Show this help message`;
               <div className="flex justify-center min-h-[500px] min-w-[600px]">
                 {renderGame()}
               </div>
+            </div>
+          )}
+          {currentGame === 'cube' && (
+            <div className="flex justify-center min-h-[300px]">
+              {renderGame()}
             </div>
           )}
         </div>
