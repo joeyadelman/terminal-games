@@ -20,12 +20,21 @@ export function Terminal() {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
+  const availableCommands = {
+    'help': 'Show available commands',
+    'ls': 'List available games',
+    'clear': 'Clear terminal screen',
+    'pwd': 'Print working directory',
+    'whoami': 'Display current user',
+    'date': 'Show current date and time',
+  };
+
   const games = {
-    snake: 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
-    tetris: 'The original block stacking game',
-    pong: 'Classic paddle game against CPU',
-    invaders: 'Classic space shooter. Defend Earth from alien invasion!',
-    cube: 'Display an ASCII cube'
+    'snake.sh': 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
+    'tetris.sh': 'The original block stacking game',
+    'pong.sh': 'Classic paddle game against CPU',
+    'invaders.sh': 'Classic space shooter. Defend Earth from alien invasion!',
+    'cube.sh': 'Display an ASCII cube'
   };
 
   const handleCommand = (input: string) => {
@@ -34,52 +43,63 @@ export function Terminal() {
 
     switch (cmd) {
       case 'help':
-        output = `Available commands:
-list - Show available games
-play [game] - Start a game
-cube - Display ASCII cube
-q - Exit current game
-clear - Clear terminal
-help - Show this help message`;
-        break;
-
-      case 'list':
-        output = 'Available games:\n' + Object.entries(games)
+        output = 'Available commands:\n' + Object.entries(availableCommands)
           .map(([name, desc]) => `${name} - ${desc}`)
           .join('\n');
+        break;
+
+      case 'ls':
+        output = Object.entries(games)
+          .map(([name, desc]) => `${name}\t${desc}`)
+          .join('\n');
+        break;
+
+      case 'pwd':
+        output = '/home/user/terminal-games';
+        break;
+
+      case 'whoami':
+        output = 'player';
+        break;
+
+      case 'date':
+        output = new Date().toString();
         break;
 
       case 'clear':
         setCommands([]);
         return;
 
-      case 'cube':
-        setCurrentGame('cube');
-        output = 'Displaying ASCII cube...';
-        break;
-
       default:
-        if (cmd.startsWith('play ')) {
-          const gameName = cmd.split(' ')[1];
-          if (games[gameName as keyof typeof games]) {
-            output = `Loading ${gameName}...`;
-            setCurrentGame(gameName);
+        if (cmd.startsWith('./')) {
+          if (!cmd.endsWith('.sh')) {
+            output = `bash: ${cmd}: No such file or directory\nNote: Game files should end with .sh (e.g., ./snake.sh)`;
           } else {
-            output = `Game "${gameName}" not found. Type "list" to see available games.`;
+            const gameName = cmd.slice(2, -3); // Remove './' and '.sh'
+            if (games[`${gameName}.sh` as keyof typeof games]) {
+              output = `Starting ${gameName}.sh...\nPress 'q' to quit the game.`;
+              setCurrentGame(gameName);
+            } else {
+              output = `bash: ${cmd}: No such file or directory\nType 'ls' to see available games`;
+            }
           }
+        } else if (cmd.endsWith('.sh')) {
+          output = `bash: ${cmd}: command not found\nDid you mean './${cmd}'?`;
+        } else if (Object.keys(games).some(game => game.startsWith(cmd))) {
+          output = `bash: ${cmd}: command not found\nDid you mean './${cmd}.sh'?`;
         } else if (cmd === 'exit') {
           if (currentGame) {
-            output = `Exiting ${currentGame}...`;
+            output = `Terminating ${currentGame}.sh process...`;
             setCurrentGame(null);
           } else {
-            output = 'No game is currently running.';
+            output = 'bash: exit: no active process';
           }
         } else {
-          output = `Command not found: ${cmd}. Type "help" for available commands.`;
+          output = `bash: ${cmd}: command not found\nType 'help' to see available commands`;
         }
     }
 
-    setCommands([...commands, { command: input, output }]);
+    setCommands(prev => [...prev, { command: input, output }]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -193,7 +213,7 @@ help - Show this help message`;
                        ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗███████║ 
                         ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ 
 `}</pre>
-          <p className="text-sm mt-4">Type "help" for available commands</p>
+          <p className="text-sm mt-4">Type "help" for commands or "ls" for games</p>
           <p className="text-xs opacity-75 mt-1">v1.0.0 | Created by Walt</p>
         </div>
       )}
@@ -267,7 +287,7 @@ help - Show this help message`;
           {commands.map((cmd, i) => (
             <div key={i} className="mb-2">
               <div>
-                <span className="text-green-500">&gt; </span>
+                <span className="text-green-500">player@terminal-games:~$ </span>
                 {cmd.command}
               </div>
               <div className="whitespace-pre-line">{cmd.output}</div>
@@ -275,7 +295,7 @@ help - Show this help message`;
           ))}
 
           <div className="flex">
-            <span className="text-green-500">&gt; </span>
+            <span className="text-green-500">player@terminal-games:~$ </span>
             <input
               type="text"
               value={currentInput}
