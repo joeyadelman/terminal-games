@@ -8,19 +8,25 @@ A retro-style terminal-based gaming platform built with Next.js and TypeScript. 
 - Command-line game navigation
 - Multiple classic games:
   - 🐍 Snake: Classic snake game with progressive difficulty
-  - 🧱 Tetris (Coming Soon)
-  - 🏓 Pong (Coming Soon)
-- High score tracking with local storage
+  - 🧱 Tetris: Block stacking puzzle game
+  - 🏓 Pong: Classic paddle game against CPU
+  - 👾 Space Invaders: Defend Earth from alien invasion
+- Global leaderboards with top 10 scores
+- High score tracking
 - Responsive design
 - Keyboard controls
 
 ## 🎯 Available Commands
 
 - `help` - Show available commands
-- `list` - Show available games
+- `ls` - List available games
 - `play [game]` - Start a game (e.g., `play snake`)
 - `q` - Exit current game
 - `clear` - Clear terminal
+- `name` - Change your display name
+- `whoami` - Display current user
+- `pwd` - Print working directory
+- `date` - Show current date and time
 
 ## 🚀 Getting Started
 
@@ -41,14 +47,31 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## 🎮 How to Play Snake
+## 🎮 How to Play
 
-1. Type `play snake` to start the game
-2. Use arrow keys to control the snake
-3. Eat the red food to grow and increase your score
-4. Avoid hitting walls and yourself
-5. The snake speeds up as your score increases
-6. Type `exit` to quit the game
+### Snake
+- Use arrow keys to control the snake
+- Eat red food to grow and increase score
+- Avoid hitting walls and yourself
+- Snake speeds up as score increases
+
+### Tetris
+- ← → : Move left/right
+- ↓ : Move down
+- ↑ or Z : Rotate clockwise
+- X : Rotate counter-clockwise
+- Clear lines to score points
+
+### Pong
+- Use ↑↓ arrow keys to move paddle
+- Score points by getting the ball past CPU paddle
+- Ball speed increases over time
+
+### Space Invaders
+- ← → : Move ship left/right
+- Spacebar : Shoot
+- Avoid alien bullets and prevent invasion
+- Destroy all aliens to win bonus points
 
 ## 🛠️ Built With
 
@@ -56,6 +79,7 @@ npm run dev
 - TypeScript
 - Tailwind CSS
 - React 19
+- Supabase for global leaderboards
 - Local Storage for score persistence
 
 ## 🎨 Design Choices
@@ -65,15 +89,18 @@ npm run dev
 - Minimalist UI focusing on gameplay
 - Progressive difficulty in games
 - Command-line interface for nostalgia
+- Global leaderboards showing top 10 scores per game
 
 ## 🔜 Upcoming Features
 
-- Additional classic games (Tetris, Pong)
-- Global leaderboard
-- More terminal commands
 - Game settings customization
 - Mobile touch controls
 - Sound effects
+- Achievement system
+- Daily challenges
+- Easter eggs hidden in commands
+- Mini programming puzzles
+- Terminal shortcuts tutorial
 
 ## 🤝 Contributing
 
