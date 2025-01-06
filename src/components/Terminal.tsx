@@ -36,10 +36,10 @@ export function Terminal() {
   };
 
   const games = {
-    'snake.sh': 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
-    'tetris.sh': 'The original block stacking game',
-    'pong.sh': 'Classic paddle game against CPU',
-    'invaders.sh': 'Classic space shooter. Defend Earth from alien invasion!'
+    'snake': 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
+    'tetris': 'The original block stacking game',
+    'pong': 'Classic paddle game against CPU',
+    'invaders': 'Classic space shooter. Defend Earth from alien invasion!'
   };
 
   const handleCommand = (input: string) => {
@@ -92,25 +92,14 @@ export function Terminal() {
         return;
 
       default:
-        if (cmd.startsWith('./')) {
-          if (!cmd.endsWith('.sh')) {
-            output = `bash: ${cmd}: No such file or directory\nNote: Game files should end with .sh (e.g., ./snake.sh)`;
-          } else {
-            const gameName = cmd.slice(2, -3); // Remove './' and '.sh'
-            if (games[`${gameName}.sh` as keyof typeof games]) {
-              output = `Starting ${gameName}.sh...\nPress 'q' to quit the game.`;
-              setCurrentGame(gameName);
-            } else {
-              output = `bash: ${cmd}: No such file or directory\nType 'ls' to see available games`;
-            }
-          }
-        } else if (cmd.endsWith('.sh')) {
-          output = `bash: ${cmd}: command not found\nDid you mean './${cmd}'?`;
-        } else if (Object.keys(games).some(game => game.startsWith(cmd))) {
-          output = `bash: ${cmd}: command not found\nDid you mean './${cmd}.sh'?`;
+        if (Object.keys(games).includes(cmd)) {
+          output = `Starting ${cmd}...\nPress 'q' to quit the game.`;
+          setCurrentGame(cmd);
+        } else if (cmd.startsWith('./') || cmd.endsWith('.sh')) {
+          output = `Note: You can now just type the game name (e.g., 'snake' instead of './snake.sh')`;
         } else if (cmd === 'exit') {
           if (currentGame) {
-            output = `Terminating ${currentGame}.sh process...`;
+            output = `Terminating ${currentGame}...`;
             setCurrentGame(null);
           } else {
             output = 'bash: exit: no active process';
