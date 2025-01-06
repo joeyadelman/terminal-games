@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { submitScore } from '../../utils/supabase';
 
 type Position = { x: number; y: number };
 type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
@@ -379,6 +380,20 @@ export function Tetris({
       </div>
     );
   };
+
+  const handleGameOver = useCallback(async () => {
+    const newHighScore = Math.max(score, highScore);
+    setHighScore(newHighScore);
+    localStorage.setItem('tetrisHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('tetris', score, 'player');
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
+    onGameOver({ score, highScore: newHighScore });
+  }, [score, highScore, onGameOver]);
 
   return (
     <div className="flex flex-col items-center">

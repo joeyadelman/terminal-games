@@ -5,6 +5,7 @@ import { Snake } from './games/Snake';
 import { Tetris } from './games/Tetris';
 import { Pong } from './games/Pong';
 import { SpaceInvaders } from './games/SpaceInvaders';
+import { Leaderboard } from './Leaderboard';
 
 type Command = {
   command: string;
@@ -213,63 +214,69 @@ export function Terminal() {
       )}
 
       {currentGame ? (
-        <div>
-          <p className="mb-4">Press 'q' to quit the game</p>
-          {currentGame === 'tetris' && (
-            <div className="relative">
-              <div className="absolute left-0 text-green-500 mt-8">
-                <p>Controls:</p>
-                <p>← → : Move left/right</p>
-                <p>↓ : Move down</p>
-                <p>↑ or Z : Rotate clockwise</p>
-                <p>X : Rotate counter-clockwise</p>
-                <p>Clear lines to score points!</p>
-              </div>
-              <div className="flex justify-center">
-                {renderGame()}
-              </div>
+        <div className="relative">
+          <div>
+            <p className="mb-4">Press 'q' to quit the game</p>
+            <div className="absolute right-4 top-0 w-64">
+              <Leaderboard game={currentGame} />
             </div>
-          )}
-          {currentGame === 'snake' && (
-            <div className="relative">
-              <div className="absolute left-0 text-green-500 mt-8">
-                <p>Controls:</p>
-                <p>← → ↑ ↓ : Move snake</p>
-                <p>Collect food to grow and score points!</p>
-                <p>Don't hit the walls or yourself!</p>
+            
+            {currentGame === 'tetris' && (
+              <div className="relative">
+                <div className="absolute left-0 text-green-500 mt-8">
+                  <p>Controls:</p>
+                  <p>← → : Move left/right</p>
+                  <p>↓ : Move down</p>
+                  <p>↑ or Z : Rotate clockwise</p>
+                  <p>X : Rotate counter-clockwise</p>
+                  <p>Clear lines to score points!</p>
+                </div>
+                <div className="flex justify-center">
+                  {renderGame()}
+                </div>
               </div>
-              <div className="flex justify-center min-h-[500px] min-w-[500px]">
-                {renderGame()}
+            )}
+            {currentGame === 'snake' && (
+              <div className="relative">
+                <div className="absolute left-0 text-green-500 mt-8">
+                  <p>Controls:</p>
+                  <p>← → ↑ ↓ : Move snake</p>
+                  <p>Collect food to grow and score points!</p>
+                  <p>Don't hit the walls or yourself!</p>
+                </div>
+                <div className="flex justify-center min-h-[500px] min-w-[500px]">
+                  {renderGame()}
+                </div>
               </div>
-            </div>
-          )}
-          {currentGame === 'pong' && (
-            <div className="relative">
-              <div className="absolute left-0 text-green-500 mt-8">
-                <p>Controls:</p>
-                <p>↑ ↓ : Move paddle up/down</p>
-                <p>Score points against the CPU!</p>
-                <p>Ball speeds up with each hit</p>
+            )}
+            {currentGame === 'pong' && (
+              <div className="relative">
+                <div className="absolute left-0 text-green-500 mt-8">
+                  <p>Controls:</p>
+                  <p>↑ ↓ : Move paddle up/down</p>
+                  <p>Score points against the CPU!</p>
+                  <p>Ball speeds up with each hit</p>
+                </div>
+                <div className="flex justify-center min-h-[500px] min-w-[600px]">
+                  {renderGame()}
+                </div>
               </div>
-              <div className="flex justify-center min-h-[500px] min-w-[600px]">
-                {renderGame()}
+            )}
+            {currentGame === 'invaders' && (
+              <div className="relative">
+                <div className="absolute left-0 text-green-500 mt-8">
+                  <p>Controls:</p>
+                  <p>← → : Move left/right</p>
+                  <p>SPACE : Shoot</p>
+                  <p>Destroy all aliens to win!</p>
+                  <p>Don't get hit by alien bullets!</p>
+                </div>
+                <div className="flex justify-center min-h-[500px] min-w-[600px]">
+                  {renderGame()}
+                </div>
               </div>
-            </div>
-          )}
-          {currentGame === 'invaders' && (
-            <div className="relative">
-              <div className="absolute left-0 text-green-500 mt-8">
-                <p>Controls:</p>
-                <p>← → : Move left/right</p>
-                <p>SPACE : Shoot</p>
-                <p>Destroy all aliens to win!</p>
-                <p>Don't get hit by alien bullets!</p>
-              </div>
-              <div className="flex justify-center min-h-[500px] min-w-[600px]">
-                {renderGame()}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       ) : (
         <div>

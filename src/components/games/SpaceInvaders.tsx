@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import spaceAlien from '@/assets/space-alien.png';
+import { submitScore } from '../../utils/supabase';
 
 type Position = { x: number; y: number };
 type Alien = Position & { alive: boolean };
@@ -85,21 +86,35 @@ export function SpaceInvaders({
   }, []);
 
   // Game over handling
-  const handleGameOver = useCallback(() => {
+  const handleGameOver = useCallback(async () => {
     setIsPlaying(false);
     const newHighScore = Math.max(score, highScore);
     setHighScore(newHighScore);
     localStorage.setItem('invadersHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('invaders', score, 'player');
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
     onGameOver({ score, highScore: newHighScore });
   }, [score, highScore, onGameOver]);
 
   // Win handling
-  const handleWin = useCallback(() => {
+  const handleWin = useCallback(async () => {
     setIsPlaying(false);
     const finalScore = score + 100; // Bonus for winning
     const newHighScore = Math.max(finalScore, highScore);
     setHighScore(newHighScore);
     localStorage.setItem('invadersHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('invaders', finalScore, 'player');
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
     onGameOver({ score: finalScore, highScore: newHighScore });
   }, [score, highScore, onGameOver]);
 

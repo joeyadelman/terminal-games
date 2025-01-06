@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { submitScore } from '../../utils/supabase';
 
 type Position = {
   x: number;
@@ -185,6 +186,21 @@ export function Pong({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isPlaying]);
+
+  const handleGameOver = useCallback(async () => {
+    setIsPlaying(false);
+    const newHighScore = Math.max(leftPaddle.score, highScore);
+    setHighScore(newHighScore);
+    localStorage.setItem('pongHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('pong', leftPaddle.score, 'player');
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
+    onGameOver({ score: leftPaddle.score, highScore: newHighScore });
+  }, [leftPaddle.score, highScore, onGameOver]);
 
   return (
     <div className="flex flex-col items-center">

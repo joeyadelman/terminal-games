@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { submitScore } from '../../utils/supabase';
 
 type Position = {
   x: number;
@@ -99,6 +100,7 @@ export function Snake({
       setIsGameOver(true);
       const newHighScore = Math.max(score, highScore);
       setHighScore(newHighScore);
+      handleGameOver();
       localStorage.setItem('snakeHighScore', newHighScore.toString());
       onGameOver({ score, highScore: newHighScore });
       return;
@@ -163,6 +165,21 @@ export function Snake({
     const gameLoop = setInterval(moveSnake, getCurrentSpeed());
     return () => clearInterval(gameLoop);
   }, [moveSnake, getCurrentSpeed, isPlaying]);
+
+  const handleGameOver = useCallback(async () => {
+    setIsPlaying(false);
+    const newHighScore = Math.max(score, highScore);
+    setHighScore(newHighScore);
+    localStorage.setItem('snakeHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('snake', score, 'player'); // You can add player name input later
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
+    onGameOver({ score, highScore: newHighScore });
+  }, [score, highScore, onGameOver]);
 
   return (
     <div className="flex flex-col items-center">
