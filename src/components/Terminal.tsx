@@ -17,6 +17,11 @@ export function Terminal() {
   const [currentInput, setCurrentInput] = useState('');
   const [currentGame, setCurrentGame] = useState<string | null>(null);
   const [currentScore, setCurrentScore] = useState(0);
+  const [playerName, setPlayerName] = useState(() => 
+    typeof window !== 'undefined' 
+      ? localStorage.getItem('terminalPlayerName') || 'player'
+      : 'player'
+  );
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
@@ -27,6 +32,7 @@ export function Terminal() {
     'pwd': 'Print working directory',
     'whoami': 'Display current user',
     'date': 'Show current date and time',
+    'name': 'Change your display name',
   };
 
   const games = {
@@ -37,16 +43,32 @@ export function Terminal() {
   };
 
   const handleCommand = (input: string) => {
-    const cmd = input.toLowerCase().trim();
+    const [cmd, ...args] = input.toLowerCase().trim().split(' ');
     let output = '';
-
+  
     switch (cmd) {
       case 'help':
         output = 'Available commands:\n' + Object.entries(availableCommands)
           .map(([name, desc]) => `${name} - ${desc}`)
           .join('\n');
         break;
-
+  
+      case 'name':
+        if (args.length === 0) {
+          output = 'Usage: name <new-name>\nCurrent name: ' + playerName;
+        } else {
+          const newName = args.join(' ');
+          if (newName.length < 2 || newName.length > 20) {
+            output = 'Name must be between 2 and 20 characters';
+          } else {
+            setPlayerName(newName);
+            localStorage.setItem('terminalPlayerName', newName);
+            setCommands([]);
+            output = `Welcome, ${newName}!`;
+          }
+        }
+        break;
+  
       case 'ls':
         output = Object.entries(games)
           .map(([name, desc]) => `${name}\t${desc}`)
@@ -150,6 +172,7 @@ export function Terminal() {
           <Snake 
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
+            playerName={playerName}
           />
         );
       case 'tetris':
@@ -157,6 +180,7 @@ export function Terminal() {
           <Tetris
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
+            playerName={playerName}
           />
         );
       case 'pong':
@@ -171,6 +195,7 @@ export function Terminal() {
           <SpaceInvaders
             onGameOver={handleGameOver}
             onScoreUpdate={handleScoreUpdate}
+            playerName={playerName}
           />
         );
       default:
@@ -285,7 +310,7 @@ export function Terminal() {
           {commands.map((cmd, i) => (
             <div key={i} className="mb-2">
               <div>
-                <span className="text-green-500">player@terminal-games:~$ </span>
+                <span className="text-green-500">{playerName}@terminal-games:~$ </span>
                 {cmd.command}
               </div>
               <div className="whitespace-pre-line">{cmd.output}</div>
@@ -293,7 +318,7 @@ export function Terminal() {
           ))}
 
           <div className="flex">
-            <span className="text-green-500">player@terminal-games:~$ </span>
+            <span className="text-green-500">{playerName}@terminal-games:~$ </span>
             <input
               type="text"
               value={currentInput}

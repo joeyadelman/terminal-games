@@ -95,10 +95,12 @@ const WALL_KICKS = [
 
 export function Tetris({ 
   onGameOver,
-  onScoreUpdate 
+  onScoreUpdate,
+  playerName 
 }: { 
   onGameOver: (stats: { score: number; highScore: number }) => void;
   onScoreUpdate: (score: number) => void;
+  playerName: string;
 }) {
   const [grid, setGrid] = useState<Grid>(() => 
     Array(GRID_HEIGHT).fill(null).map(() => 
@@ -197,13 +199,13 @@ export function Tetris({
     localStorage.setItem('tetrisHighScore', newHighScore.toString());
     
     try {
-      await submitScore('tetris', score, 'player');
+      await submitScore('tetris', score, playerName);
     } catch (err) {
       console.error('Failed to submit score:', err);
     }
     
     onGameOver({ score, highScore: newHighScore });
-  }, [score, highScore, onGameOver]);
+  }, [score, highScore, onGameOver, playerName]);
 
   const clearLines = useCallback((grid: Grid) => {
     let linesCleared = 0;

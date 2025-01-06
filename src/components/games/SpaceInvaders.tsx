@@ -27,10 +27,12 @@ const ALIEN_SHOOT_INTERVAL = 500; // Half second
 
 export function SpaceInvaders({ 
   onGameOver,
-  onScoreUpdate 
+  onScoreUpdate,
+  playerName 
 }: { 
   onGameOver: (stats: { score: number; highScore: number }) => void;
   onScoreUpdate: (score: number) => void;
+  playerName: string;
 }) {
   const [player, setPlayer] = useState<Position>({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT - 40 });
   const [bullets, setBullets] = useState<Bullet[]>([]);
@@ -93,13 +95,13 @@ export function SpaceInvaders({
     localStorage.setItem('invadersHighScore', newHighScore.toString());
     
     try {
-      await submitScore('invaders', score, 'player');
+      await submitScore('invaders', score, playerName);
     } catch (err) {
       console.error('Failed to submit score:', err);
     }
     
     onGameOver({ score, highScore: newHighScore });
-  }, [score, highScore, onGameOver]);
+  }, [score, highScore, onGameOver, playerName]);
 
   // Win handling
   const handleWin = useCallback(async () => {
@@ -110,13 +112,13 @@ export function SpaceInvaders({
     localStorage.setItem('invadersHighScore', newHighScore.toString());
     
     try {
-      await submitScore('invaders', finalScore, 'player');
+      await submitScore('invaders', finalScore, playerName);
     } catch (err) {
       console.error('Failed to submit score:', err);
     }
     
     onGameOver({ score: finalScore, highScore: newHighScore });
-  }, [score, highScore, onGameOver]);
+  }, [score, highScore, onGameOver, playerName]);
 
   // Game update logic
   const updateGame = useCallback(() => {

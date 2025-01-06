@@ -15,10 +15,12 @@ type GameStats = {
 
 export function Snake({ 
   onGameOver,
-  onScoreUpdate 
+  onScoreUpdate,
+  playerName
 }: { 
   onGameOver: (stats: GameStats) => void;
   onScoreUpdate: (score: number) => void;
+  playerName: string;
 }) {
   const GRID_SIZE = 20;
   const CELL_SIZE = 20;
@@ -173,13 +175,13 @@ export function Snake({
     localStorage.setItem('snakeHighScore', newHighScore.toString());
     
     try {
-      await submitScore('snake', score, 'player'); // You can add player name input later
+      await submitScore('snake', score, playerName);
     } catch (err) {
       console.error('Failed to submit score:', err);
     }
     
     onGameOver({ score, highScore: newHighScore });
-  }, [score, highScore, onGameOver]);
+  }, [score, highScore, onGameOver, playerName]);
 
   return (
     <div className="flex flex-col items-center">
