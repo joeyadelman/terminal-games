@@ -193,12 +193,6 @@ export function Pong({
     setHighScore(newHighScore);
     localStorage.setItem('pongHighScore', newHighScore.toString());
     
-    try {
-      await submitScore('pong', leftPaddle.score, 'player');
-    } catch (err) {
-      console.error('Failed to submit score:', err);
-    }
-    
     onGameOver({ score: leftPaddle.score, highScore: newHighScore });
   }, [leftPaddle.score, highScore, onGameOver]);
 

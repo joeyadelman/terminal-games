@@ -217,9 +217,11 @@ export function Terminal() {
         <div className="relative">
           <div>
             <p className="mb-4">Press 'q' to quit the game</p>
-            <div className="absolute right-4 top-0 w-64">
-              <Leaderboard game={currentGame} />
-            </div>
+            {currentGame && currentGame !== 'pong' && (
+              <div className="absolute right-4 top-0 w-64">
+                <Leaderboard game={currentGame} />
+              </div>
+            )}
             
             {currentGame === 'tetris' && (
               <div className="relative">

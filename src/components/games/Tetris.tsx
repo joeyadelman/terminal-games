@@ -191,6 +191,20 @@ export function Tetris({
     return newGrid;
   }, []);
 
+  const handleGameOver = useCallback(async () => {
+    const newHighScore = Math.max(score, highScore);
+    setHighScore(newHighScore);
+    localStorage.setItem('tetrisHighScore', newHighScore.toString());
+    
+    try {
+      await submitScore('tetris', score, 'player');
+    } catch (err) {
+      console.error('Failed to submit score:', err);
+    }
+    
+    onGameOver({ score, highScore: newHighScore });
+  }, [score, highScore, onGameOver]);
+
   const clearLines = useCallback((grid: Grid) => {
     let linesCleared = 0;
     const newGrid = grid.filter(row => {
@@ -226,17 +240,14 @@ export function Tetris({
       const nextPiece = createNewPiece();
       if (checkCollision(nextPiece, clearedGrid)) {
         setGameOver(true);
-        const newHighScore = Math.max(newScore, highScore);
-        setHighScore(newHighScore);
-        localStorage.setItem('tetrisHighScore', newHighScore.toString());
-        onGameOver({ score: newScore, highScore: newHighScore });
+        handleGameOver();
       } else {
         setCurrentPiece(nextPiece);
       }
     } else {
       setCurrentPiece(newPiece);
     }
-  }, [currentPiece, grid, gameOver, score, highScore]);
+  }, [currentPiece, grid, gameOver, score, highScore, handleGameOver]);
 
   const moveHorizontal = useCallback((direction: -1 | 1) => {
     if (gameOver || !currentPiece) return;
@@ -380,20 +391,6 @@ export function Tetris({
       </div>
     );
   };
-
-  const handleGameOver = useCallback(async () => {
-    const newHighScore = Math.max(score, highScore);
-    setHighScore(newHighScore);
-    localStorage.setItem('tetrisHighScore', newHighScore.toString());
-    
-    try {
-      await submitScore('tetris', score, 'player');
-    } catch (err) {
-      console.error('Failed to submit score:', err);
-    }
-    
-    onGameOver({ score, highScore: newHighScore });
-  }, [score, highScore, onGameOver]);
 
   return (
     <div className="flex flex-col items-center">
