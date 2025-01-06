@@ -174,10 +174,12 @@ export function Snake({
     setHighScore(newHighScore);
     localStorage.setItem('snakeHighScore', newHighScore.toString());
     
-    try {
-      await submitScore('snake', score, playerName);
-    } catch (err) {
-      console.error('Failed to submit score:', err);
+    if (score > 0) {
+      try {
+        await submitScore('snake', score, playerName);
+      } catch (err) {
+        console.error('Failed to submit score:', err);
+      }
     }
     
     onGameOver({ score, highScore: newHighScore });

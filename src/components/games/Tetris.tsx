@@ -198,10 +198,12 @@ export function Tetris({
     setHighScore(newHighScore);
     localStorage.setItem('tetrisHighScore', newHighScore.toString());
     
-    try {
-      await submitScore('tetris', score, playerName);
-    } catch (err) {
-      console.error('Failed to submit score:', err);
+    if (score > 0) {
+      try {
+        await submitScore('tetris', score, playerName);
+      } catch (err) {
+        console.error('Failed to submit score:', err);
+      }
     }
     
     onGameOver({ score, highScore: newHighScore });

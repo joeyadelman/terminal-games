@@ -17,11 +17,7 @@ export function Terminal() {
   const [currentInput, setCurrentInput] = useState('');
   const [currentGame, setCurrentGame] = useState<string | null>(null);
   const [currentScore, setCurrentScore] = useState(0);
-  const [playerName, setPlayerName] = useState(() => 
-    typeof window !== 'undefined' 
-      ? localStorage.getItem('terminalPlayerName') || 'player'
-      : 'player'
-  );
+  const [playerName, setPlayerName] = useState('player');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
@@ -202,6 +198,13 @@ export function Terminal() {
     window.addEventListener('keydown', handleQuitKey);
     return () => window.removeEventListener('keydown', handleQuitKey);
   }, [currentGame]);
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('terminalPlayerName');
+    if (savedName) {
+      setPlayerName(savedName);
+    }
+  }, []);
 
   return (
     <div className="font-mono text-green-500 p-4 pl-8">

@@ -94,10 +94,12 @@ export function SpaceInvaders({
     setHighScore(newHighScore);
     localStorage.setItem('invadersHighScore', newHighScore.toString());
     
-    try {
-      await submitScore('invaders', score, playerName);
-    } catch (err) {
-      console.error('Failed to submit score:', err);
+    if (score > 0) {
+      try {
+        await submitScore('invaders', score, playerName);
+      } catch (err) {
+        console.error('Failed to submit score:', err);
+      }
     }
     
     onGameOver({ score, highScore: newHighScore });
@@ -111,10 +113,12 @@ export function SpaceInvaders({
     setHighScore(newHighScore);
     localStorage.setItem('invadersHighScore', newHighScore.toString());
     
-    try {
-      await submitScore('invaders', finalScore, playerName);
-    } catch (err) {
-      console.error('Failed to submit score:', err);
+    if (finalScore > 0) {
+      try {
+        await submitScore('invaders', finalScore, playerName);
+      } catch (err) {
+        console.error('Failed to submit score:', err);
+      }
     }
     
     onGameOver({ score: finalScore, highScore: newHighScore });
