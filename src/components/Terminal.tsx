@@ -21,7 +21,7 @@ export function Terminal() {
 
   const availableCommands = {
     'help': 'Show available commands',
-    'ls': 'List available games',
+    'ls': 'List directory contents',
     'clear': 'Clear terminal screen',
     'pwd': 'Print working directory',
     'whoami': 'Display current user',
