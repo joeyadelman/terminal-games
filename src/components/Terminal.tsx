@@ -29,6 +29,7 @@ export function Terminal() {
     'whoami': 'Display current user',
     'date': 'Show current date and time',
     'name': 'Change your display name',
+    '[game]': 'Play [game]',
   };
 
   const games = {
