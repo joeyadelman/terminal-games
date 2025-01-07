@@ -1,112 +1,88 @@
 # Terminal Games Hub
 
-A retro-style terminal-based gaming platform built with Next.js and TypeScript. Experience classic games through a nostalgic command-line interface.
+A terminal-based gaming platform built with Next.js and TypeScript. Play classic games through a nostalgic command-line interface.
 
-## 🎮 Features
+## Features
 
-- Terminal-style interface with classic green-on-black theme
+- Terminal-style green-on-black theme
 - Command-line game navigation
-- Multiple classic games:
-  - 🐍 Snake: Classic snake game with progressive difficulty
-  - 🧱 Tetris: Block stacking puzzle game
-  - 🏓 Pong: Classic paddle game against CPU
-  - 👾 Space Invaders: Defend Earth from alien invasion
-- Global leaderboards with top 10 scores
+- Classic games:
+  - Snake: Grow the snake and avoid collisions
+  - Tetris: Clear lines with falling blocks
+  - Pong: Paddle game vs. CPU
+  - Space Invaders: Defend Earth from aliens
+- Global leaderboards
 - High score tracking
 - Responsive design
 - Keyboard controls
 
-## 🎯 Available Commands
+## Commands
 
-- `help` - Show available commands
-- `ls` - List available games
-- `play [game]` - Start a game (e.g., `play snake`)
-- `q` - Exit current game
+- `help` - Show commands
+- `ls` - List games
+- `play [game]` - Start a game
+- `q` - Exit game
 - `clear` - Clear terminal
-- `name` - Change your display name
-- `whoami` - Display current user
+- `name` - Change display name
+- `whoami` - Show current user
 - `pwd` - Print working directory
-- `date` - Show current date and time
+- `date` - Show date and time
 
-## 🚀 Getting Started
+## Getting Started
 
-1. Clone the repository:
-```bash
-git clone https://github.com/your-username/terminal-games-hub.git
-```
-
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/terminal-games-hub.git
+   ```
 2. Install dependencies:
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
+3. Run the dev server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-3. Run the development server:
-```bash
-npm run dev
-```
+## How to Play
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+**Snake**  
+- Arrow keys: Control the snake  
+- Eat food, avoid walls and yourself  
 
-## 🎮 How to Play
+**Tetris**  
+- ← → : Move left/right  
+- ↓ : Move down  
+- ↑ or Z : Rotate clockwise  
+- X : Rotate counter-clockwise  
 
-### Snake
-- Use arrow keys to control the snake
-- Eat red food to grow and increase score
-- Avoid hitting walls and yourself
-- Snake speeds up as score increases
+**Pong**  
+- ↑↓ : Move paddle  
+- Score by outmaneuvering the CPU  
 
-### Tetris
-- ← → : Move left/right
-- ↓ : Move down
-- ↑ or Z : Rotate clockwise
-- X : Rotate counter-clockwise
-- Clear lines to score points
+**Space Invaders**  
+- ← → : Move ship  
+- Spacebar: Shoot aliens  
 
-### Pong
-- Use ↑↓ arrow keys to move paddle
-- Score points by getting the ball past CPU paddle
-- Ball speed increases over time
+## Built With
 
-### Space Invaders
-- ← → : Move ship left/right
-- Spacebar : Shoot
-- Avoid alien bullets and prevent invasion
-- Destroy all aliens to win bonus points
+- Next.js  
+- TypeScript  
+- Tailwind CSS  
+- React  
+- Supabase (leaderboards)  
+- Local Storage (scores)
 
-## 🛠️ Built With
+## Upcoming Features
 
-- Next.js 15
-- TypeScript
-- Tailwind CSS
-- React 19
-- Supabase for global leaderboards
-- Local Storage for score persistence
+- Game settings  
+- Mobile controls  
+- Sound effects  
+- Achievements  
+- Daily challenges  
+- Easter eggs  
+- Mini puzzles  
 
-## 🎨 Design Choices
+## Contributing
 
-- Retro terminal aesthetic with phosphor green text
-- Monospace font for authentic terminal feel
-- Minimalist UI focusing on gameplay
-- Progressive difficulty in games
-- Command-line interface for nostalgia
-- Global leaderboards showing top 10 scores per game
-
-## 🔜 Upcoming Features
-
-- Game settings customization
-- Mobile touch controls
-- Sound effects
-- Achievement system
-- Daily challenges
-- Easter eggs hidden in commands
-- Mini programming puzzles
-- Terminal shortcuts tutorial
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 🙏 Acknowledgments
-
-- Inspired by classic terminal games
-- Built for retro gaming enthusiasts
+Contributions welcome—submit a Pull Request!

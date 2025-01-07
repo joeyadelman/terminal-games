@@ -76,7 +76,7 @@ export function Terminal() {
         break;
 
       case 'whoami':
-        output = 'player';
+        output = playerName;
         break;
 
       case 'date':
