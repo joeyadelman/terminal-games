@@ -303,7 +303,7 @@ export function Terminal() {
           {commands.map((cmd, i) => (
             <div key={i} className="mb-2">
               <div>
-                <span className="text-green-500">{playerName}@terminal-games:~$ </span>
+                <span className="text-green-500">{playerName}@terminal-quest:~$ </span>
                 {cmd.command}
               </div>
               <div className="whitespace-pre-line">{cmd.output}</div>
@@ -311,7 +311,7 @@ export function Terminal() {
           ))}
 
           <div className="flex">
-            <span className="text-green-500">{playerName}@terminal-games:~$ </span>
+            <span className="text-green-500">{playerName}@terminal-quest:~$ </span>
             <input
               type="text"
               value={currentInput}
