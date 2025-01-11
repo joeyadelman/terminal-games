@@ -33,10 +33,10 @@ export function Terminal() {
   };
 
   const games = {
-    'snake': 'Classic snake game. Eat food, grow longer, don\'t hit walls!',
-    'tetris': 'The original block stacking game',
-    'pong': 'Classic paddle game against CPU',
-    'invaders': 'Classic space shooter. Defend Earth from alien invasion!'
+    'snake': '- Classic snake game. Eat food, grow longer, don\'t hit walls!',
+    'tetris': '- The original block stacking game.',
+    'pong': '- Classic paddle game against CPU.',
+    'invaders': '- Classic space shooter. Defend Earth from alien invasion!'
   };
 
   const handleCommand = (input: string) => {
